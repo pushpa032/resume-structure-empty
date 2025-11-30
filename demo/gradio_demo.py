@@ -1,5 +1,6 @@
 import json
 import gradio as gr
+import argparse
 from datetime import datetime
 
 # Simple mock analysis function
@@ -61,4 +62,8 @@ with gr.Blocks() as demo:
 
 
 if __name__ == "__main__":
-    demo.launch(share=False, server_port=7860)  # set share=True to create a public link
+    parser = argparse.ArgumentParser(description="Run the Gradio demo app")
+    parser.add_argument("--share", action="store_true", help="Create a public Gradio share link")
+    parser.add_argument("--port", type=int, default=7860, help="Port to run the server on")
+    args = parser.parse_args()
+    demo.launch(share=args.share, server_port=args.port)
