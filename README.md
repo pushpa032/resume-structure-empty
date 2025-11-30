@@ -1,6 +1,6 @@
-# Resume Screening App
+# Resume Screening Agent
 
-A lightweight resume screening web app built with Next.js, TypeScript, Tailwind CSS and Radix UI primitives. This repo includes a small UI to upload resumes (PDF, DOC, DOCX), perform a client-side analysis (mock/placeholder), and export/save analysis results as JSON.
+An AI-powered agent that analyzes resumes and ranks candidates based on job requirements. Built for the 48-Hour AI Agent Development Challenge. This repo includes a small UI to upload resumes (PDF, DOC, DOCX), perform a client-side analysis (mock/placeholder), and export/save analysis results as JSON.
 
 ---
 
@@ -79,6 +79,12 @@ npm run build
 npm run start
 ```
 
+Tip — open the app in your default browser automatically (PowerShell):
+
+```powershell
+start http://localhost:3000
+```
+
 ---
 
 ## Project Structure (high level)
@@ -87,6 +93,32 @@ npm run start
 - `components/` — UI components and containers (notably `resume-screening-app.tsx` and `ui/` components like `avatar`, `label`, `button`, etc.).
 - `lib/` — small utilities (e.g., `utils.ts`).
 - `public/` — static assets (favicon, images).
+
+---
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Resume Screening Agent                   │
+├─────────────────────────────────────────────────────────────┤
+│  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐  │
+│  │   Frontend   │    │   Backend    │    │  AI Engine   │  │
+│  │  (Next.js)   │◄──►│ (Node/Python)│◄──►│ (OpenAI API) │  │
+│  └──────────────┘    └──────────────┘    └──────────────┘  │
+│           │                     │                  │       │
+│           ▼                     ▼                  ▼       │
+│  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐  │
+│  │   Upload     │    │  Processing  │    │  Scoring     │  │
+│  │   Resume     │    │   Engine     │    │  Algorithm   │  │
+│  └──────────────┘    └──────────────┘    └──────────────┘  │
+│           │                     │                  │       │
+│           ▼                     ▼                  ▼       │
+│  ┌─────────────────────────────────────────────────────────┐│
+│  │              Candidate Compatibility Report             ││
+│  └─────────────────────────────────────────────────────────┘│
+└─────────────────────────────────────────────────────────────┘
+```
 
 ---
 
@@ -143,6 +175,67 @@ git push -u origin main --force
 - Authentication for GitHub Push:
   - For HTTPS, configure a PAT (Personal Access Token) if needed and use credential manager.
   - For SSH, generate an SSH key pair and add it to your GitHub account; then use the `git@github.com:...` remote.
+
+---
+
+## Common Checks & Fixes
+
+- If you see "'next' is not recognized" or `npm run dev` fails after installing packages:
+```powershell
+npm install
+npx next dev
+```
+`npx` runs the local Next binary directly if PATH isn’t picking it up.
+
+- Verify Node.js version (Next.js requires recent Node LTS; Node 18+ recommended):
+```powershell
+node --version
+```
+
+- Reinstall dependencies and clear cache (fixes corrupt installs):
+PowerShell (Windows):
+```powershell
+Remove-Item -Recurse -Force node_modules, package-lock.json
+npm install
+```
+Unix/macOS (bash):
+```bash
+rm -rf node_modules package-lock.json
+npm install
+```
+
+- Check dev server logs in terminal for errors. If `npm run dev` or `npm run build` show an error, copy the error output for debugging.
+
+- Port problems or "server not reachable" — check what process is using port 3000:
+PowerShell:
+```powershell
+Get-NetTCPConnection -LocalPort 3000
+```
+General (works in PowerShell too):
+```powershell
+netstat -ano | Select-String ":3000"
+```
+
+- If the port is blocked, kill or reset the process (using Task Manager or `Stop-Process -Id <pid>`), or run the server on a different port:
+```powershell
+npx next dev -p 3001
+```
+
+- Browser doesn’t open: Confirm the server started (terminal logs will show the ready URL). In PowerShell you can open a browser with:
+```powershell
+start http://localhost:3000
+```
+
+- If you're running in a headless environment (no browser), forward the port or connect remotely and use the URL in your environment.
+
+- If you see an "Application error: a client-side exception has occurred" in the browser, open DevTools (F12) → Console and copy the error/stack trace for debugging. The app also contains a client-side error alert you can check.
+
+- If `npm run dev` still fails with a missing `next` binary: verify `next` exists under `node_modules/.bin`:
+```powershell
+ls node_modules\.bin\next
+```
+If it is not present, re-run `npm install` and review the output for errors.
+
 
 ---
 
