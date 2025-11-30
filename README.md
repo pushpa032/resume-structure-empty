@@ -122,6 +122,88 @@ start http://localhost:3000
 
 ---
 
+## Live Demo
+
+- Hosted demo: Not deployed yet. If you would like a hosted demo, you can deploy this app to Vercel by importing the repository — see the Deployment section below.
+- Local demo: Start the app locally and navigate to the running URL (http://localhost:3000) as shown in the Running section.
+
+Deployment to Vercel (recommended for static/Next.js projects):
+
+1. Push your code to the GitHub repository.
+2. Log in to Vercel and import the project using the GitHub link below.
+3. Add any required environment variables (e.g., `OPENAI_API_KEY`) in Vercel settings.
+4. Deploy — Vercel will automatically build using the Next.js framework.
+
+---
+
+## Git Repository Link
+
+Full source code and assets are available in this repository:
+
+https://github.com/pushpa032/resume-structure-empty
+
+---
+
+## Agent Details: What the Agent Does
+
+This Resume Screening Agent automates the early-stage candidate screening process by doing the following:
+
+- Accept a candidate's resume (PDF/DOC/DOCX) via file upload or drag/drop.
+- Parse the resume contents (client-side or backend parsing), extract skills, education, and experience.
+- Run a scoring algorithm that evaluates the candidate against job requirements in three categories: Skills Match, Knowledge Depth, and Experience Relevance.
+- Generate a summarized Candidate Compatibility Report with scores, extracted key skills, suggested interview questions, and a recommended disposition (Pass / Consider / Reject).
+- Allow the user to save and download the analysis results as JSON.
+
+---
+
+## Features & Limitations
+
+Features:
+- Supports PDF/DOC/DOCX uploads (client-side validation with 5MB default limit).
+- Mock/placeholder analysis pipeline which demonstrates how a production AI-backed pipeline could function.
+- Client-side error capture and reporting in the UI.
+- Save analysis results to localStorage with a JSON download option.
+
+Limitations:
+- Current implementation uses mock analysis (no integrated backend NLP) by default.
+- No authentication, user accounts, or role-based access control — implement these if you deploy publicly.
+- No server-side document parsing for binary attachments by default — need a backend or third-party document parsing API for robust extraction.
+- Potential scoring bias and false positives; analyze and test thoroughly with real data before using the agent for hiring decisions.
+
+---
+
+## Tools, APIs & Models Used
+
+- Frontend: Next.js (App Router), React, TypeScript, TailwindCSS
+- UI: Radix UI primitives, Lucide-react icons
+- Analysis Engine (optional): Designed to work with OpenAI GPT APIs (or another LLM) via a backend service. If you enable the AI Engine, configure `OPENAI_API_KEY` and a server endpoint that proxies requests to the OpenAI API.
+- Local testing and prototyping: The app runs locally via `npm run dev` and `npx next dev`.
+
+---
+
+## Setup & Deployment (Optional AI / OpenAI Integration)
+
+1. Create a `.env.local` at the project root (next.js style) and add keys you need:
+
+```powershell
+# Example
+OPENAI_API_KEY=sk-psa...your-openai-key-here...
+```
+
+2. If adding a backend for analysis, create a Node or Python server with endpoints that:
+  - Accept a resume upload and return a parsed text or JSON.
+  - Call OpenAI's API with a prompt to analyze the extracted text and generate scores.
+
+3. Update frontend to call your backend endpoints instead of using mock analysis.
+
+4. Deploy to Vercel and set the same environment variables in the Vercel dashboard for production.
+
+---
+
+If you want, I can help you deploy this to Vercel (or create a quick Gradio/Streamlit demo) and provide a working live demo link. Tell me which hosting option you prefer (Vercel, Streamlit, Gradio, or other) and I’ll set it up and add the live URL to the README.
+
+---
+
 ## Notes & Troubleshooting
 
 - Avoid committing build artifacts and dependencies:
@@ -239,30 +321,3 @@ If it is not present, re-run `npm install` and review the output for errors.
 
 ---
 
-## How to Contribute
-
-All contributions are welcome. Typical workflow:
-
-1. Fork the repository
-2. Create a branch for your change
-3. Commit and push your changes
-4. Open a pull request with a clear summary of changes and reasoning
-
----
-
-## Known Issues / TODO
-
-- The resume analysis is currently a demonstration mock (no backend NLP parser). You can implement a server-side analysis or integrate a cloud NLP API for feature parity.
-- Consider moving large binary files (if any) to Git LFS.
-
----
-
-## License
-
-Choose the license that suits you — the placeholder below indicates MIT. Replace it if you prefer another license.
-
-MIT © <Your Name>
-
----
-
-If you'd like any additions or adjustments (badges, images, examples, sample screenshots, CI setup, or customized PR guidance), tell me what you'd like and I'll update the README accordingly.
